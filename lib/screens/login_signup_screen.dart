@@ -2,6 +2,7 @@ import 'package:chat_app/config/palette.dart';
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
@@ -19,19 +20,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userEmail = '';
   String userPassword = '';
 
-  bool _tryValidation() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-    }
-    return isValid;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -84,8 +78,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: Center(
                 child: GestureDetector(
                   onTap: () async {
-                    if (_tryValidation()) {
-                      if (isSignupScreen) {
+                    FocusScope.of(context).unfocus();
+                    if (isSignupScreen) {
+                      _formKey.currentState!.save();
+                      if (userName.length < 4) {
+                        Fluttertoast.showToast(
+                          msg: 'Username must be at least 4 characters long.',
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else if (!userEmail.contains('@')) {
+                        Fluttertoast.showToast(
+                          msg: 'Please enter a valid email address.',
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else if (userPassword.length < 6) {
+                        Fluttertoast.showToast(
+                          msg: 'Password must be at least 6 characters long.',
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else {
                         try {
                           final newUser = await _authentication
                               .createUserWithEmailAndPassword(
@@ -106,7 +117,20 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           print(e);
                         }
                       }
-                      if (!isSignupScreen) {
+                    }
+                    if (!isSignupScreen) {
+                      _formKey.currentState!.save();
+                      if (userEmail.isEmpty) {
+                        Fluttertoast.showToast(
+                          msg: 'Please enter your email address.',
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else if (userPassword.isEmpty) {
+                        Fluttertoast.showToast(
+                          msg: 'Please enter your password.',
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else {
                         try {
                           final newUser =
                               await _authentication.signInWithEmailAndPassword(
@@ -125,6 +149,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           }
                         } catch (e) {
                           print(e);
+                          Fluttertoast.showToast(
+                            msg: 'Invalid email address or password.',
+                            gravity: ToastGravity.CENTER,
+                          );
                         }
                       }
                     }
@@ -260,16 +288,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               children: [
                                 TextFormField(
                                   key: const ValueKey(1),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !value.contains('@')) {
-                                      return 'Please enter a valid email address.';
-                                    }
-                                    return null;
-                                  },
                                   onSaved: (value) {
                                     userEmail = value!;
                                   },
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(
                                       Icons.email,
@@ -300,15 +322,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 ),
                                 TextFormField(
                                   key: const ValueKey(2),
-                                  validator: (value) {
-                                    if (value!.isEmpty || value.length < 6) {
-                                      return 'Invalid password.';
-                                    }
-                                    return null;
-                                  },
                                   onSaved: (value) {
                                     userPassword = value!;
                                   },
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(
                                       Icons.lock,
@@ -347,12 +364,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               children: [
                                 TextFormField(
                                   key: const ValueKey(3),
-                                  validator: (value) {
-                                    if (value!.isEmpty || value.length < 4) {
-                                      return 'Username must be at least 4 characters long.';
-                                    }
-                                    return null;
-                                  },
                                   onSaved: (value) {
                                     userName = value!;
                                   },
@@ -386,16 +397,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 ),
                                 TextFormField(
                                   key: const ValueKey(4),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !value.contains('@')) {
-                                      return 'Please enter a valid email address.';
-                                    }
-                                    return null;
-                                  },
                                   onSaved: (value) {
                                     userEmail = value!;
                                   },
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(
                                       Icons.email,
@@ -426,15 +431,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 ),
                                 TextFormField(
                                   key: const ValueKey(5),
-                                  validator: (value) {
-                                    if (value!.isEmpty || value.length < 6) {
-                                      return 'Password must be at least 6 characters long.';
-                                    }
-                                    return null;
-                                  },
                                   onSaved: (value) {
                                     userPassword = value!;
                                   },
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(
                                       Icons.lock,
