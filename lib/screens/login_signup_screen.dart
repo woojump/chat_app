@@ -1,5 +1,7 @@
 import 'package:chat_app/config/palette.dart';
+import 'package:chat_app/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
@@ -9,17 +11,20 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  final _authentication = FirebaseAuth.instance;
+
   bool isSignupScreen = false;
   final _formKey = GlobalKey<FormState>();
   String userName = '';
   String userEmail = '';
   String userPassword = '';
 
-  void _tryValidation() {
+  bool _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
     }
+    return isValid;
   }
 
   @override
@@ -78,8 +83,51 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               right: 0.0,
               child: Center(
                 child: GestureDetector(
-                  onTap: () {
-                    _tryValidation();
+                  onTap: () async {
+                    if (_tryValidation()) {
+                      if (isSignupScreen) {
+                        try {
+                          final newUser = await _authentication
+                              .createUserWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+                          if (newUser.user != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) {
+                                  return const ChatScreen();
+                                },
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                      }
+                      if (!isSignupScreen) {
+                        try {
+                          final newUser =
+                              await _authentication.signInWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+                          if (newUser.user != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) {
+                                  return const ChatScreen();
+                                },
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                      }
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.only(top: 45.0),
