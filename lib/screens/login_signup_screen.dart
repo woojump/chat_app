@@ -1,5 +1,4 @@
 import 'package:chat_app/config/palette.dart';
-import 'package:chat_app/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -112,17 +111,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             'Username': userName,
                             'Email': userEmail,
                           });
-
-                          if (newUser.user != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) {
-                                  return const ChatScreen();
-                                },
-                              ),
-                            );
-                          }
                         } catch (e) {
                           print(e);
                         }
@@ -142,21 +130,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         );
                       } else {
                         try {
-                          final newUser =
-                              await _authentication.signInWithEmailAndPassword(
+                          await _authentication.signInWithEmailAndPassword(
                             email: userEmail,
                             password: userPassword,
                           );
-                          if (newUser.user != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) {
-                                  return const ChatScreen();
-                                },
-                              ),
-                            );
-                          }
                         } catch (e) {
                           print(e);
                           Fluttertoast.showToast(
