@@ -112,7 +112,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             'Email': userEmail,
                           });
                         } catch (e) {
-                          print(e);
+                          debugPrint('$e');
                         }
                       }
                     }
@@ -135,7 +135,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             password: userPassword,
                           );
                         } catch (e) {
-                          print(e);
+                          debugPrint('$e');
                           Fluttertoast.showToast(
                             msg: 'Invalid email address or password.',
                             gravity: ToastGravity.CENTER,

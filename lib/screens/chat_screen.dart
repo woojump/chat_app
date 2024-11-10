@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
         currentUser = user;
       }
     } catch (e) {
-      print(e);
+      debugPrint('$e');
     }
   }
 
