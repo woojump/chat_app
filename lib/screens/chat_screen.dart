@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -40,6 +41,25 @@ class _ChatScreenState extends State<ChatScreen> {
               Text(
                 currentUser!.email!,
               ),
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('chats/2S3yt9ySlasAk5pM6ZQd/message')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                final docs = snapshot.data!.docs;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      return Text(docs[index]['text']);
+                    },
+                  ),
+                );
+              },
+            ),
             IconButton(
               onPressed: () {
                 _authentication.signOut();
