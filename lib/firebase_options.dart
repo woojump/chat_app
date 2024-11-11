@@ -24,7 +24,10 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -54,16 +57,7 @@ class DefaultFirebaseOptions {
     appId: '1:462773287999:ios:b6724be1ad966a67a40c8a',
     messagingSenderId: '462773287999',
     projectId: 'chat-app-ecbbf',
-    storageBucket: 'chat-app-ecbbf.firebasestorage.app',
+    storageBucket: 'chat-app-ecbbf.appspot.com',
     iosBundleId: 'com.example.chatApp',
   );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBtmJhVuQStGMAy4QMc46GhqVmCUhZm9Go',
-    appId: '1:462773287999:android:63f017734b5265c4a40c8a',
-    messagingSenderId: '462773287999',
-    projectId: 'chat-app-ecbbf',
-    storageBucket: 'chat-app-ecbbf.firebasestorage.app',
-  );
-
 }
