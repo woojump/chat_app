@@ -1,6 +1,7 @@
+import 'package:chat_app/widgets/messages.dart';
+import 'package:chat_app/widgets/new_message_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -33,43 +34,33 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (currentUser != null)
-              Text(
-                currentUser!.email!,
-              ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('chats/2S3yt9ySlasAk5pM6ZQd/message')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                final docs = snapshot.data!.docs;
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      return Text(docs[index]['text']);
-                    },
-                  ),
-                );
-              },
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              _authentication.signOut();
+            },
+            icon: const Icon(
+              Icons.logout_outlined,
             ),
-            IconButton(
-              onPressed: () {
-                _authentication.signOut();
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
-                size: 50.0,
+          ),
+        ],
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: const Padding(
+          padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 40.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: Messages(),
               ),
-            ),
-          ],
+              NewMessageField(),
+            ],
+          ),
         ),
       ),
     );
