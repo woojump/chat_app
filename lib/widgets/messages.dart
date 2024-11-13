@@ -46,6 +46,21 @@ class Messages extends StatelessWidget {
             chatDocs[index - 1]['time'].toDate().minute;
   }
 
+  bool _isFirstMessageOfTheDay(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> chatDocs,
+    int index,
+  ) {
+    if (index == chatDocs.length - 1) {
+      return true;
+    }
+    return !(chatDocs[index]['time'].toDate().year ==
+            chatDocs[index + 1]['time'].toDate().year &&
+        chatDocs[index]['time'].toDate().month ==
+            chatDocs[index + 1]['time'].toDate().month &&
+        chatDocs[index]['time'].toDate().day ==
+            chatDocs[index + 1]['time'].toDate().day);
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -77,6 +92,7 @@ class Messages extends StatelessWidget {
                   _hasPrevContinuousMessage(chatDocs, index),
               hasNextContinuousMessage:
                   _hasNextContinuousMessage(chatDocs, index),
+              isFirstMessageOfTheDay: _isFirstMessageOfTheDay(chatDocs, index),
             );
           },
         );

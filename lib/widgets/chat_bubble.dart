@@ -1,4 +1,5 @@
 import 'package:chat_app/config/palette.dart';
+import 'package:chat_app/widgets/date_separator.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -12,6 +13,7 @@ class ChatBubble extends StatelessWidget {
     required this.dateTime,
     required this.hasPrevContinuousMessage,
     required this.hasNextContinuousMessage,
+    required this.isFirstMessageOfTheDay,
   });
 
   final String userName;
@@ -20,53 +22,59 @@ class ChatBubble extends StatelessWidget {
   final DateTime dateTime;
   final bool hasPrevContinuousMessage;
   final bool hasNextContinuousMessage;
+  final bool isFirstMessageOfTheDay;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      // mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      textDirection: isMe ? TextDirection.rtl : TextDirection.ltr,
+    return Column(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        if (isFirstMessageOfTheDay) DateSeparator(dateTime: dateTime),
+        Row(
+          // mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          textDirection: isMe ? TextDirection.rtl : TextDirection.ltr,
           children: [
-            if (!isMe && !hasPrevContinuousMessage)
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 28.0,
-                  top: 6.0,
-                ),
-                child: Text(
-                  userName,
-                  style: const TextStyle(
-                    color: Palette.senderNameColor,
-                    fontSize: 12.0,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!isMe && !hasPrevContinuousMessage)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 28.0,
+                      top: 6.0,
+                    ),
+                    child: Text(
+                      userName,
+                      style: const TextStyle(
+                        color: Palette.senderNameColor,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+                BubbleSpecialThree(
+                  isSender: isMe ? true : false,
+                  color: isMe
+                      ? Palette.myChatBubbleColor
+                      : Palette.otherChatBubbleColor,
+                  tail: hasNextContinuousMessage ? false : true,
+                  text: message,
+                  textStyle: TextStyle(
+                    fontSize: 16.0,
+                    color: isMe ? Colors.white : Colors.black,
                   ),
                 ),
-              ),
-            BubbleSpecialThree(
-              isSender: isMe ? true : false,
-              color: isMe
-                  ? Palette.myChatBubbleColor
-                  : Palette.otherChatBubbleColor,
-              tail: hasNextContinuousMessage ? false : true,
-              text: message,
-              textStyle: TextStyle(
-                fontSize: 16.0,
-                color: isMe ? Colors.white : Colors.black,
-              ),
+              ],
             ),
+            if (!hasNextContinuousMessage)
+              Text(
+                DateFormat('HH:mm').format(dateTime),
+                style: const TextStyle(
+                  color: Palette.senderNameColor,
+                  fontSize: 12.0,
+                ),
+              ),
           ],
         ),
-        if (!hasNextContinuousMessage)
-          Text(
-            DateFormat('HH:mm').format(dateTime),
-            style: const TextStyle(
-              color: Palette.senderNameColor,
-              fontSize: 12.0,
-            ),
-          ),
       ],
     );
   }
