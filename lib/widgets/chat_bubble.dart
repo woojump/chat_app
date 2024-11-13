@@ -1,3 +1,5 @@
+import 'package:chat_app/config/palette.dart';
+import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -20,30 +22,29 @@ class ChatBubble extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!isMe) Text(userName),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16.0),
-                  topRight: const Radius.circular(16.0),
-                  bottomLeft: isMe
-                      ? const Radius.circular(16.0)
-                      : const Radius.circular(0.0),
-                  bottomRight: isMe
-                      ? const Radius.circular(0.0)
-                      : const Radius.circular(16.0),
+            if (!isMe)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 28.0,
+                  top: 6.0,
                 ),
-                color: isMe ? Colors.green : Colors.black12,
-              ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 5.0,
-                horizontal: 10.0,
-              ),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  fontSize: 16.0,
+                child: Text(
+                  userName,
+                  style: const TextStyle(
+                    color: Palette.senderNameColor,
+                    fontSize: 12.0,
+                  ),
                 ),
+              ),
+            BubbleSpecialThree(
+              isSender: isMe ? true : false,
+              color: isMe
+                  ? Palette.myChatBubbleColor
+                  : Palette.otherChatBubbleColor,
+              text: message,
+              textStyle: TextStyle(
+                fontSize: 16.0,
+                color: isMe ? Colors.white : Colors.black,
               ),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:chat_app/config/palette.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class NewMessageField extends StatefulWidget {
 class _NewMessageFieldState extends State<NewMessageField> {
   String _userEnterMessage = '';
   final _controller = TextEditingController();
+
   void _sendMessage() async {
     final user = FirebaseAuth.instance.currentUser;
     final userData = await FirebaseFirestore.instance
@@ -32,30 +34,68 @@ class _NewMessageFieldState extends State<NewMessageField> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _controller,
-            maxLines: null,
-            decoration: const InputDecoration(
-              hintText: 'Enter a message',
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      width: MediaQuery.sizeOf(context).width - 40.0,
+      // height: 40.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(
+          color: Palette.textColor1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              minLines: 1,
+              maxLines: 7,
+              decoration: const InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    style: BorderStyle.none,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    style: BorderStyle.none,
+                  ),
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 16.0,
+                  color: Palette.textColor1,
+                ),
+                hintText: 'Enter a message',
+                contentPadding: EdgeInsets.fromLTRB(14.0, 6.0, 0.0, 6.0),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _userEnterMessage = value;
+                });
+              },
             ),
-            onChanged: (value) {
-              setState(() {
-                _userEnterMessage = value;
-              });
-            },
           ),
-        ),
-        IconButton(
-          onPressed: _userEnterMessage.isEmpty ? null : _sendMessage,
-          icon: const Icon(
-            Icons.send,
-          ),
-          color: Colors.green,
-        ),
-      ],
+          if (_userEnterMessage.isNotEmpty)
+            GestureDetector(
+              onTap: _sendMessage,
+              child: Container(
+                margin: const EdgeInsets.all(4.0),
+                height: 32.0,
+                width: 32.0,
+                decoration: BoxDecoration(
+                  color: Palette.myChatBubbleColor,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: const Icon(
+                  Icons.arrow_upward_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

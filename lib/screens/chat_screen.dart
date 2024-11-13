@@ -51,8 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const Padding(
-          padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 40.0),
+        child: const SafeArea(
           child: Column(
             children: [
               Expanded(
