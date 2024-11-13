@@ -1,6 +1,7 @@
 import 'package:chat_app/config/palette.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
@@ -8,16 +9,20 @@ class ChatBubble extends StatelessWidget {
     required this.userName,
     required this.message,
     required this.isMe,
+    required this.dateTime,
   });
 
   final String userName;
   final String message;
   final bool isMe;
+  final DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      // mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      textDirection: isMe ? TextDirection.rtl : TextDirection.ltr,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,6 +53,13 @@ class ChatBubble extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        Text(
+          DateFormat('HH:mm').format(dateTime),
+          style: const TextStyle(
+            color: Palette.senderNameColor,
+            fontSize: 12.0,
+          ),
         ),
       ],
     );

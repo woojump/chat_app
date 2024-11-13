@@ -32,7 +32,7 @@ class Messages extends StatelessWidget {
               userName: chatDocs[index]['userName'],
               message: chatDocs[index]['text'],
               isMe: chatDocs[index]['userID'] == user!.uid,
-              // isMe: true,
+              dateTime: chatDocs[index]['time'].toDate(),
             );
           },
         );
