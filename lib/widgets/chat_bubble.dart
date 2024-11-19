@@ -30,7 +30,6 @@ class ChatBubble extends StatelessWidget {
       children: [
         if (isFirstMessageOfTheDay) DateSeparator(dateTime: dateTime),
         Row(
-          // mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           textDirection: isMe ? TextDirection.rtl : TextDirection.ltr,
           children: [
@@ -52,11 +51,11 @@ class ChatBubble extends StatelessWidget {
                     ),
                   ),
                 BubbleSpecialThree(
-                  isSender: isMe ? true : false,
+                  isSender: isMe,
                   color: isMe
                       ? Palette.myChatBubbleColor
                       : Palette.otherChatBubbleColor,
-                  tail: hasNextContinuousMessage ? false : true,
+                  tail: !hasNextContinuousMessage,
                   text: message,
                   textStyle: TextStyle(
                     fontSize: 16.0,

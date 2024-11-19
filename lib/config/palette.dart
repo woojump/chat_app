@@ -8,7 +8,7 @@ class Palette {
   static const Color facebookColor = Color(0xFF3B5999);
   static const Color googleColor = Color(0xFFDE4B39);
   static const Color backgroundColor = Color(0xFFECF3F9);
-  static const Color myChatBubbleColor = Color.fromRGBO(70, 190, 70, 1.0);
-  static const Color otherChatBubbleColor = Color.fromRGBO(225, 225, 231, 1.0);
-  static const Color senderNameColor = Color.fromRGBO(128, 128, 128, 1.0);
+  static const Color myChatBubbleColor = Color(0xFF46BE46);
+  static const Color otherChatBubbleColor = Color(0xFFE1E1E7);
+  static const Color senderNameColor = Color(0xFF808080);
 }

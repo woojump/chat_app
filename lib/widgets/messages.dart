@@ -6,6 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Messages extends StatelessWidget {
   const Messages({super.key});
 
+  bool _isSameTime(DateTime dt1, DateTime dt2) {
+    return dt1.year == dt2.year &&
+        dt1.month == dt2.month &&
+        dt1.day == dt2.day &&
+        dt1.hour == dt2.hour &&
+        dt1.minute == dt2.minute;
+  }
+
   bool _hasPrevContinuousMessage(
     List<QueryDocumentSnapshot<Map<String, dynamic>>> chatDocs,
     int index,
@@ -13,17 +21,15 @@ class Messages extends StatelessWidget {
     if (index == chatDocs.length - 1) {
       return false;
     }
-    return chatDocs[index]['userID'] == chatDocs[index + 1]['userID'] &&
-        chatDocs[index]['time'].toDate().year ==
-            chatDocs[index + 1]['time'].toDate().year &&
-        chatDocs[index]['time'].toDate().month ==
-            chatDocs[index + 1]['time'].toDate().month &&
-        chatDocs[index]['time'].toDate().day ==
-            chatDocs[index + 1]['time'].toDate().day &&
-        chatDocs[index]['time'].toDate().hour ==
-            chatDocs[index + 1]['time'].toDate().hour &&
-        chatDocs[index]['time'].toDate().minute ==
-            chatDocs[index + 1]['time'].toDate().minute;
+
+    final currentChatDoc = chatDocs[index];
+    final prevChatDoc = chatDocs[index + 1];
+
+    final bool isSameUser = currentChatDoc['userID'] == prevChatDoc['userID'];
+    final bool isSameTime = _isSameTime(
+        currentChatDoc['time'].toDate(), prevChatDoc['time'].toDate());
+
+    return isSameUser && isSameTime;
   }
 
   bool _hasNextContinuousMessage(
@@ -33,17 +39,14 @@ class Messages extends StatelessWidget {
     if (index == 0) {
       return false;
     }
-    return chatDocs[index]['userID'] == chatDocs[index - 1]['userID'] &&
-        chatDocs[index]['time'].toDate().year ==
-            chatDocs[index - 1]['time'].toDate().year &&
-        chatDocs[index]['time'].toDate().month ==
-            chatDocs[index - 1]['time'].toDate().month &&
-        chatDocs[index]['time'].toDate().day ==
-            chatDocs[index - 1]['time'].toDate().day &&
-        chatDocs[index]['time'].toDate().hour ==
-            chatDocs[index - 1]['time'].toDate().hour &&
-        chatDocs[index]['time'].toDate().minute ==
-            chatDocs[index - 1]['time'].toDate().minute;
+    final currentChatDoc = chatDocs[index];
+    final nextChatDoc = chatDocs[index - 1];
+
+    final bool isSameUser = currentChatDoc['userID'] == nextChatDoc['userID'];
+    final bool isSameTime = _isSameTime(
+        currentChatDoc['time'].toDate(), nextChatDoc['time'].toDate());
+
+    return isSameUser && isSameTime;
   }
 
   bool _isFirstMessageOfTheDay(
@@ -53,12 +56,12 @@ class Messages extends StatelessWidget {
     if (index == chatDocs.length - 1) {
       return true;
     }
-    return !(chatDocs[index]['time'].toDate().year ==
-            chatDocs[index + 1]['time'].toDate().year &&
-        chatDocs[index]['time'].toDate().month ==
-            chatDocs[index + 1]['time'].toDate().month &&
-        chatDocs[index]['time'].toDate().day ==
-            chatDocs[index + 1]['time'].toDate().day);
+    final currentChatDocTime = chatDocs[index]['time'].toDate();
+    final prevChatDocTime = chatDocs[index + 1]['time'].toDate();
+
+    return !(currentChatDocTime.year == prevChatDocTime.year &&
+        currentChatDocTime.month == prevChatDocTime.month &&
+        currentChatDocTime.day == prevChatDocTime.day);
   }
 
   @override

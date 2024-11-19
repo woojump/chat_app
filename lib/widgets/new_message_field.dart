@@ -12,7 +12,7 @@ class NewMessageField extends StatefulWidget {
 
 class _NewMessageFieldState extends State<NewMessageField> {
   String _userEnterMessage = '';
-  final _controller = TextEditingController();
+  late final TextEditingController _controller;
 
   void _sendMessage() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -30,6 +30,18 @@ class _NewMessageFieldState extends State<NewMessageField> {
     setState(() {
       _userEnterMessage = '';
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
