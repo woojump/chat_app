@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Messages extends StatelessWidget {
-  const Messages({super.key});
+  const Messages({
+    super.key,
+    required this.chatRoomID,
+  });
+
+  final String chatRoomID;
 
   bool _isSameTime(DateTime dt1, DateTime dt2) {
     return dt1.year == dt2.year &&
@@ -68,7 +73,7 @@ class Messages extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection('chat')
+          .collection('/chatrooms/$chatRoomID/chat')
           .orderBy(
             'time',
             descending: true,

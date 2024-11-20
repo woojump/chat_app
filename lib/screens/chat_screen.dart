@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({
+    super.key,
+    required this.chatRoomID,
+  });
+
+  final String chatRoomID;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -51,13 +56,17 @@ class _ChatScreenState extends State<ChatScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const SafeArea(
+        child: SafeArea(
           child: Column(
             children: [
               Expanded(
-                child: Messages(),
+                child: Messages(
+                  chatRoomID: widget.chatRoomID,
+                ),
               ),
-              NewMessageField(),
+              NewMessageField(
+                chatRoomID: widget.chatRoomID,
+              ),
             ],
           ),
         ),
