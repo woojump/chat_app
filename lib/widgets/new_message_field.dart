@@ -23,11 +23,15 @@ class _NewMessageFieldState extends State<NewMessageField> {
     final user = FirebaseAuth.instance.currentUser;
     final firestore = FirebaseFirestore.instance;
     final userData = await firestore.collection('user').doc(user!.uid).get();
-    await firestore.collection('/chatrooms/${widget.chatRoomID}/chat').add({
+    final newChatDoc =
+        await firestore.collection('/chatrooms/${widget.chatRoomID}/chat').add({
       'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': user.uid,
       'userName': userData['Username'],
+    });
+    await firestore.doc('/chatrooms/${widget.chatRoomID}').update({
+      'recentMessageID': newChatDoc.id,
     });
     _controller.clear();
     setState(() {

@@ -1,4 +1,4 @@
-import 'package:chat_app/screens/chat_screen.dart';
+import 'package:chat_app/screens/chat_room_screen.dart';
 import 'package:chat_app/screens/login_signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +24,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const ChatScreen(
-              chatRoomID: 'GCGSUqSzOm30wrcBEM7y',
-            );
+            return const ChatRoomScreen();
           }
           return const LoginSignupScreen();
         },
