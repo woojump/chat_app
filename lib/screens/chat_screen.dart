@@ -6,9 +6,11 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     super.key,
     required this.chatRoomID,
+    required this.chatRoomName,
   });
 
   final String chatRoomID;
+  final String chatRoomName;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -18,7 +20,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.chatRoomName),
+      ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {

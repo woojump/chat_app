@@ -7,15 +7,15 @@ class ChatRoom extends StatelessWidget {
     required this.chatRoomID,
     required this.chatRoomName,
     required this.numberOfParticipants,
-    required this.recentMessageText,
-    required this.recentMessageTime,
+    this.recentMessageText,
+    this.recentMessageTime,
   });
 
   final String chatRoomID;
   final String chatRoomName;
   final int numberOfParticipants;
-  final String recentMessageText;
-  final DateTime recentMessageTime;
+  final String? recentMessageText;
+  final DateTime? recentMessageTime;
 
   void _goToChatRoom(BuildContext context) {
     Navigator.push(
@@ -23,6 +23,7 @@ class ChatRoom extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) => ChatScreen(
           chatRoomID: chatRoomID,
+          chatRoomName: chatRoomName,
         ),
       ),
     );
@@ -42,8 +43,8 @@ class ChatRoom extends StatelessWidget {
           children: [
             Text(chatRoomName),
             Text('$numberOfParticipants'),
-            Text(recentMessageText),
-            Text('$recentMessageTime'),
+            if (recentMessageText != null) Text(recentMessageText!),
+            if (recentMessageTime != null) Text('$recentMessageTime'),
           ],
         ),
       ),
