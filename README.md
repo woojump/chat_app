@@ -1,16 +1,37 @@
-# chat_app
+# 💬 Chat App
 
-A new Flutter project.
+Firebase 기반 실시간 채팅 애플리케이션
 
-## Getting Started
+## 📖 개요
 
-This project is a starting point for a Flutter application.
+Flutter와 Firebase를 활용하여 개발한 실시간 메신저 앱입니다. 채팅방 생성, 실시간 메시지 전송, 사용자 인증 기능을 제공합니다.
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ 주요 기능
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 🔐 이메일 기반 회원가입/로그인
+- 💬 실시간 메시지 전송 및 수신
+- 🏠 다중 채팅방 생성 및 관리
+- 👥 채팅방 참여자 선택 및 초대
+- 🕐 메시지 시간 표시 및 날짜 구분
+- 💭 연속 메시지 말풍선 그룹화
+- 👀 최근 메시지 미리보기
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠 기술 스택
+
+- **Frontend**: Flutter 3.x, Dart 3.3.2+
+  - `firebase_auth` - 사용자 인증
+  - `cloud_firestore` - 실시간 데이터베이스
+  - `chat_bubbles` - 채팅 UI (말풍선 스타일)
+  - `intl` - 날짜/시간 포맷팅
+- **Backend**: Firebase (Authentication, Firestore)
+
+## 📝 TODO
+
+- [ ] 이미지 메시지 전송 기능
+- [ ] 푸시 알림 구현
+- [ ] 읽음/안읽음 상태 표시
+- [ ] 사용자 프로필 편집
+- [ ] 채팅방 나가기 기능
+- [ ] 메시지 검색 기능
+- [ ] 채팅방 설정 (방 이름, 알림 끄기 등)
+- [ ] 친구 추가 기능
