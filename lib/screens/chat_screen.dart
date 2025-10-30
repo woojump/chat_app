@@ -1,63 +1,44 @@
 import 'package:chat_app/widgets/messages.dart';
 import 'package:chat_app/widgets/new_message_field.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({
+    super.key,
+    required this.chatRoomID,
+    required this.chatRoomName,
+  });
+
+  final String chatRoomID;
+  final String chatRoomName;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _authentication = FirebaseAuth.instance;
-  User? currentUser;
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _authentication.currentUser;
-      if (user != null) {
-        currentUser = user;
-      }
-    } catch (e) {
-      debugPrint('$e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              _authentication.signOut();
-            },
-            icon: const Icon(
-              Icons.logout_outlined,
-            ),
-          ),
-        ],
+        title: Text(widget.chatRoomName),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const SafeArea(
+        child: SafeArea(
           child: Column(
             children: [
               Expanded(
-                child: Messages(),
+                child: Messages(
+                  chatRoomID: widget.chatRoomID,
+                ),
               ),
-              NewMessageField(),
+              NewMessageField(
+                chatRoomID: widget.chatRoomID,
+              ),
             ],
           ),
         ),

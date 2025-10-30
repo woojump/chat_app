@@ -4,7 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessageField extends StatefulWidget {
-  const NewMessageField({super.key});
+  const NewMessageField({
+    super.key,
+    required this.chatRoomID,
+  });
+
+  final String chatRoomID;
 
   @override
   State<NewMessageField> createState() => _NewMessageFieldState();
@@ -16,15 +21,17 @@ class _NewMessageFieldState extends State<NewMessageField> {
 
   void _sendMessage() async {
     final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(user!.uid)
-        .get();
-    FirebaseFirestore.instance.collection('chat').add({
+    final firestore = FirebaseFirestore.instance;
+    final userData = await firestore.collection('user').doc(user!.uid).get();
+    final newChatDoc =
+        await firestore.collection('/chatrooms/${widget.chatRoomID}/chat').add({
       'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': user.uid,
       'userName': userData['Username'],
+    });
+    await firestore.doc('/chatrooms/${widget.chatRoomID}').update({
+      'recentMessageID': newChatDoc.id,
     });
     _controller.clear();
     setState(() {
